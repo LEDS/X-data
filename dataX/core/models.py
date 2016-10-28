@@ -6,31 +6,45 @@ from django.db import models
 
 
 class Estrutura(models.Model):
-    nome = models.CharField(max_length=50)
+    nome = models.CharField(max_length=50, blank=True,
+                            null=True,)
 
 class Matriz_Curricular(models.Model):
-    nome = models.CharField(max_length=50)
-    estrutura = models.ForeignKey(Estrutura)
+    nome = models.CharField(max_length=50, blank=True,
+                            null=True,
+                            )
+    estrutura = models.ForeignKey(Estrutura, blank=True,
+                                  null=True,
+                                  )
 
 class Curso (models.Model):
-    nome = models.CharField(max_length=50)
-    matrizes_curriculares = models.ForeignKey(Matriz_Curricular)
+    nome = models.CharField(max_length=50, blank=True,
+                            null=True,
+                            )
+    matrizes_curriculares = models.ForeignKey(Matriz_Curricular, blank=True,
+                                              null=True,
+
+                                              )
 
 class Departamento(models.Model):
-    nome = models.CharField(max_length=50)
-    cursos = models.ForeignKey(Curso)
+    nome = models.CharField(max_length=50, blank=True,
+                            null=True,)
+    cursos = models.ForeignKey(Curso, blank=True,
+                               null=True,)
 
 class Campus (models.Model):
-    nome = models.CharField(max_length=50)
-    departamentos = models.ForeignKey(Departamento)
+    nome = models.CharField(max_length=50, blank=True,
+                            null=True,)
+    departamentos = models.ForeignKey(Departamento, blank=True,
+                                      null=True,)
 
 class Periodo (models.Model):
      ano = models.IntegerField()
      semestre = models.IntegerField()
 
 class Disciplina (models.Model):
-    nome = models.CharField(max_length=50)
-
+    nome = models.CharField(max_length=50, blank=True,
+                            null=True,)
 
 class Historico (models.Model):
 
@@ -50,10 +64,12 @@ class Historico (models.Model):
     )
 
 
-    Disciplina = models.ForeignKey(Disciplina)
+    Disciplina = models.ForeignKey(Disciplina, blank=True,
+                                   null=True,)
     nota = models.IntegerField()
-    periodo = models.ForeignKey(Periodo)
-
+    periodo = models.ForeignKey(Periodo, blank=True,
+                                null=True,
+                                )
 
 class Aluno (models.Model):
     data_matricula = models.DateField()
