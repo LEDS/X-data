@@ -24,11 +24,41 @@ class Campus (models.Model):
     nome = models.CharField(max_length=50)
     departamentos = models.ForeignKey(Departamento)
 
+class Periodo (models.Model):
+     ano = models.IntegerField()
+     semestre = models.IntegerField()
+
+class Disciplina (models.Model):
+    nome = models.CharField(max_length=50)
+
+
+class Historico (models.Model):
+
+    APROVADO = 'AP'
+    REPROVADO_NOTA = 'RN'
+    REPROVADO_FALTA = 'RF'
+
+    STATUS_ALUNO = (
+        (APROVADO, 'APROVADO'),
+        (REPROVADO_NOTA, 'REPROVADO_NOTA'),
+        (REPROVADO_FALTA, 'REPROVADO_FALTA'),
+    )
+    status = models.CharField(
+        max_length=2,
+        choices=STATUS_ALUNO,
+        default=APROVADO,
+    )
+
+
+    Disciplina = models.ForeignKey(Disciplina)
+    nota = models.IntegerField()
+    periodo = models.ForeignKey(Periodo)
 
 
 class Aluno (models.Model):
     data_matricula = models.DateField()
     data_conclusao = models.DateField()
+    Historico = models.ForeignKey(Historico)
     matriz_curricular = models.ForeignKey(Matriz_Curricular)
 
 
