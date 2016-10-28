@@ -54,6 +54,7 @@ class Endereco (models.Model):
 class Pessoa (models.Model):
     data_nascimento = models.DateField()
     data_conclusao_ensino_medio = models.DateField()
+    codigo_social = models.CharField(max_length=255)
     cor = models.ForeignKey(Cor)
     sexo = models.ForeignKey(Sexo)
     CEP = models.CharField(max_length=15)
