@@ -65,6 +65,5 @@ class Pessoa (models.Model):
     codigo_social = models.CharField(max_length=255)
     cor = models.OneToOneField(Cor)
     sexo = models.OneToOneField(Sexo)
-    CEP = models.CharField(max_length=15)
     matriculas = models.ForeignKey(Aluno)
     endereco = models.ForeignKey(Endereco)
