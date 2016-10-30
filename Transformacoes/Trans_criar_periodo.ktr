@@ -76,9 +76,9 @@
   <notepads>
   </notepads>
   <order>
-  <hop> <from>Arquivo_X</from><to>Selecionar matriz curricular</to><enabled>Y</enabled> </hop>
-  <hop> <from>Selecionar matriz curricular</from><to>Ordenar Matriz Curricular</to><enabled>Y</enabled> </hop>
-  <hop> <from>Ordenar Matriz Curricular</from><to>Filtrando linhas</to><enabled>Y</enabled> </hop>
+  <hop> <from>Arquivo_X</from><to>Selecionar periodo</to><enabled>Y</enabled> </hop>
+  <hop> <from>Selecionar periodo</from><to>Ordenar Periodo</to><enabled>Y</enabled> </hop>
+  <hop> <from>Ordenar Periodo</from><to>Filtrando linhas</to><enabled>Y</enabled> </hop>
   </order>
   <step>
     <name>Arquivo_X</name>
@@ -549,11 +549,7 @@
       <error_description/>
     <fields>      <field>        <name>Periodo_Let</name>
         <case_insensitive>N</case_insensitive>
-        </field>      <field>        <name>Periodo_Letivo_Ini</name>
-        <case_insensitive>N</case_insensitive>
         </field>      <field>        <name>Ano_Let</name>
-        <case_insensitive>N</case_insensitive>
-        </field>      <field>        <name>Ano_Letivo_Ini</name>
         <case_insensitive>N</case_insensitive>
         </field>      </fields>     <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
@@ -564,7 +560,7 @@
     </step>
 
   <step>
-    <name>Selecionar matriz curricular</name>
+    <name>Selecionar periodo</name>
     <type>SelectValues</type>
     <description/>
     <distribute>Y</distribute>
@@ -578,15 +574,7 @@
         <rename/>
         <length>-2</length>
         <precision>-2</precision>
-      </field>      <field>        <name>Periodo_Letivo_Ini</name>
-        <rename/>
-        <length>-2</length>
-        <precision>-2</precision>
       </field>      <field>        <name>Ano_Let</name>
-        <rename/>
-        <length>-2</length>
-        <precision>-2</precision>
-      </field>      <field>        <name>Ano_Letivo_Ini</name>
         <rename/>
         <length>-2</length>
         <precision>-2</precision>
@@ -600,7 +588,7 @@
     </step>
 
   <step>
-    <name>Ordenar Matriz Curricular</name>
+    <name>Ordenar Periodo</name>
     <type>SortRows</type>
     <description/>
     <distribute>Y</distribute>
@@ -625,19 +613,7 @@
         <presorted>N</presorted>
       </field>
       <field>
-        <name>Periodo_Letivo_Ini</name>
-        <ascending>Y</ascending>
-        <case_sensitive>N</case_sensitive>
-        <presorted>N</presorted>
-      </field>
-      <field>
         <name>Ano_Let</name>
-        <ascending>Y</ascending>
-        <case_sensitive>N</case_sensitive>
-        <presorted>N</presorted>
-      </field>
-      <field>
-        <name>Ano_Letivo_Ini</name>
         <ascending>Y</ascending>
         <case_sensitive>N</case_sensitive>
         <presorted>N</presorted>
