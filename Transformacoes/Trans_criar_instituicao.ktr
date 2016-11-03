@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <transformation>
   <info>
-    <name>Trans_criar_departamento</name>
+    <name>Trans_criar_instituicao</name>
     <description/>
     <extended_description/>
     <trans_version/>
@@ -100,13 +100,9 @@
     </attributes>
   </connection>
   <order>
-  <hop> <from>Arquivo_X</from><to>Selecionar Departamento</to><enabled>Y</enabled> </hop>
-  <hop> <from>Selecionar Departamento</from><to>Ordenando por departamento</to><enabled>Y</enabled> </hop>
-  <hop> <from>Tabela Campus</from><to>Ordenar Campus</to><enabled>Y</enabled> </hop>
-  <hop> <from>Ordenando por departamento</from><to>Merge Join</to><enabled>Y</enabled> </hop>
-  <hop> <from>Ordenar Campus</from><to>Merge Join</to><enabled>Y</enabled> </hop>
-  <hop> <from>Merge Join</from><to>Filtrando departamento</to><enabled>Y</enabled> </hop>
-  <hop> <from>Filtrando departamento</from><to>Tabela Departamento</to><enabled>Y</enabled> </hop>
+  <hop> <from>Selecionar Campus</from><to>Unique rows</to><enabled>Y</enabled> </hop>
+  <hop> <from>Arquivo_X</from><to>Selecionar Campus</to><enabled>Y</enabled> </hop>
+  <hop> <from>Unique rows</from><to>Table Campus</to><enabled>Y</enabled> </hop>
   </order>
   <step>
     <name>Arquivo_X</name>
@@ -554,77 +550,14 @@
     </fields>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>48</xloc>
-      <yloc>256</yloc>
+      <xloc>96</xloc>
+      <yloc>192</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
 
   <step>
-    <name>Filtrando departamento</name>
-    <type>Unique</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-      <count_rows>N</count_rows>
-      <count_field/>
-      <reject_duplicate_row>N</reject_duplicate_row>
-      <error_description/>
-    <fields>      <field>        <name>Desc_Departamento</name>
-        <case_insensitive>N</case_insensitive>
-        </field>      <field>        <name>id_campus</name>
-        <case_insensitive>N</case_insensitive>
-        </field>      <field>        <name>nome_campus</name>
-        <case_insensitive>N</case_insensitive>
-        </field>      </fields>     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>672</xloc>
-      <yloc>256</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Ordenando por departamento</name>
-    <type>SortRows</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-      <directory>&#x25;&#x25;java.io.tmpdir&#x25;&#x25;</directory>
-      <prefix>out</prefix>
-      <sort_size>1000000</sort_size>
-      <free_memory/>
-      <compress>N</compress>
-      <compress_variable/>
-      <unique_rows>N</unique_rows>
-    <fields>
-      <field>
-        <name>Desc_Departamento</name>
-        <ascending>Y</ascending>
-        <case_sensitive>N</case_sensitive>
-        <presorted>N</presorted>
-      </field>
-    </fields>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>368</xloc>
-      <yloc>256</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Selecionar Departamento</name>
+    <name>Selecionar Campus</name>
     <type>SelectValues</type>
     <description/>
     <distribute>Y</distribute>
@@ -634,113 +567,21 @@
            <method>none</method>
            <schema_name/>
            </partitioning>
-    <fields>      <field>        <name>Desc_Departamento</name>
-        <rename/>
-        <length>-2</length>
-        <precision>-2</precision>
-      </field>      <field>        <name>Instituicao</name>
+    <fields>      <field>        <name>Instituicao</name>
         <rename/>
         <length>-2</length>
         <precision>-2</precision>
       </field>        <select_unspecified>N</select_unspecified>
     </fields>     <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>192</xloc>
-      <yloc>256</yloc>
+      <xloc>240</xloc>
+      <yloc>192</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
 
   <step>
-    <name>Tabela Campus</name>
-    <type>TableInput</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-    <connection>xdata</connection>
-    <sql>SELECT&#xa;  id as id_campus&#xa;, nome as nome_campus&#xa;FROM core_campus&#xa;</sql>
-    <limit>0</limit>
-    <lookup/>
-    <execute_each_row>N</execute_each_row>
-    <variables_active>N</variables_active>
-    <lazy_conversion_active>N</lazy_conversion_active>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>544</xloc>
-      <yloc>64</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Ordenar Campus</name>
-    <type>SortRows</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-      <directory>&#x25;&#x25;java.io.tmpdir&#x25;&#x25;</directory>
-      <prefix>out</prefix>
-      <sort_size>1000000</sort_size>
-      <free_memory/>
-      <compress>N</compress>
-      <compress_variable/>
-      <unique_rows>N</unique_rows>
-    <fields>
-      <field>
-        <name>nome_campus</name>
-        <ascending>Y</ascending>
-        <case_sensitive>N</case_sensitive>
-        <presorted>N</presorted>
-      </field>
-    </fields>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>544</xloc>
-      <yloc>160</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Merge Join</name>
-    <type>MergeJoin</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-<join_type>INNER</join_type>
-<step1>Ordenando por departamento</step1>
-<step2>Ordenar Campus</step2>
-    <keys_1>
-      <key>Instituicao</key>
-    </keys_1>
-    <keys_2>
-      <key>nome_campus</key>
-    </keys_2>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>544</xloc>
-      <yloc>256</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Tabela Departamento</name>
+    <name>Table Campus</name>
     <type>TableOutput</type>
     <description/>
     <distribute>Y</distribute>
@@ -752,7 +593,7 @@
            </partitioning>
     <connection>xdata</connection>
     <schema/>
-    <table>core_departamento</table>
+    <table>core_campus</table>
     <commit>1000</commit>
     <truncate>N</truncate>
     <ignore_errors>N</ignore_errors>
@@ -770,17 +611,36 @@
     <fields>
         <field>
           <column_name>nome</column_name>
-          <stream_name>Desc_Departamento</stream_name>
-        </field>
-        <field>
-          <column_name>campus_id</column_name>
-          <stream_name>id_campus</stream_name>
+          <stream_name>Instituicao</stream_name>
         </field>
     </fields>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>816</xloc>
-      <yloc>256</yloc>
+      <xloc>496</xloc>
+      <yloc>192</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Unique rows</name>
+    <type>Unique</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+      <count_rows>N</count_rows>
+      <count_field/>
+      <reject_duplicate_row>N</reject_duplicate_row>
+      <error_description/>
+    <fields>      </fields>     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>384</xloc>
+      <yloc>192</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
