@@ -28,8 +28,8 @@ class Situacao (models.Model):
     nome = models.CharField(max_length=50)
 
 class Pessoa(models.Model):
-    data_nascimento = models.DateField()
-    data_conclusao_ensino_medio = models.DateField()
+    data_nascimento = models.DateField(blank=True,null=True,)
+    data_conclusao_ensino_medio = models.DateField(blank=True,null=True,)
     codigo_social = models.CharField(max_length=255)
     cor = models.ForeignKey(Cor)
     sexo = models.ForeignKey(Sexo)
