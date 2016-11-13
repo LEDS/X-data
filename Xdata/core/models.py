@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils import timezone
 
+
 class Campus (models.Model):
     nome = models.CharField(max_length=50)
 
@@ -35,18 +36,19 @@ class Pessoa(models.Model):
     sexo = models.ForeignKey(Sexo)
 
 class Aluno (models.Model):
-    data_conclusao = models.DateField(blank=True,null=True,)
+
+    matricula = models.CharField(max_length=255)
     curso = models.ForeignKey(Curso)
     pessoa = models.ForeignKey(Pessoa)
 
 class Situacao_Aluno(models.Model):
-    data = models.DateField()
     aluno = models.ForeignKey(Aluno)
     situacao = models.ForeignKey(Situacao)
+    data_registro = models.DateField(blank=True, null=True, )
+    periodo = models.ForeignKey(Periodo)
 
 class Estado (models.Model):
     nome = models.CharField(max_length=50)
-
 
 class Municipio (models.Model):
     nome = models.CharField(max_length=50)
@@ -58,4 +60,3 @@ class Endereco (models.Model):
     CEP = models.CharField(max_length=15)
     data_cadastro = models.DateField(default=timezone.now)
     pessoa = models.ForeignKey(Pessoa)
-
