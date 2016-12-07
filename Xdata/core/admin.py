@@ -4,6 +4,7 @@ from django.contrib import admin
 from .models import Cor, Sexo
 
 class CorAdmin(admin.ModelAdmin):
+
     list_display = ('nome','sigla')
     list_filter = ['nome','sigla']
     search_fields = ['nome']
