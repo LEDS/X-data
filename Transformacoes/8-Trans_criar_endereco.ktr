@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <transformation>
   <info>
-    <name>Trans_criar_pessoa</name>
+    <name>8-Trans_criar_endereco</name>
     <description/>
     <extended_description/>
     <trans_version/>
@@ -56,7 +56,7 @@
     <using_thread_priorities>Y</using_thread_priorities>
     <shared_objects_file/>
     <capture_step_performance>N</capture_step_performance>
-    <step_performance_capturing_delay>1000</step_performance_capturing_delay>
+    <step_performance_capturing_delay>100</step_performance_capturing_delay>
     <step_performance_capturing_size_limit>100</step_performance_capturing_size_limit>
     <dependencies>
     </dependencies>
@@ -132,18 +132,6 @@
   <hop> <from>Ordenar por sexo</from><to>Merge Sexo</to><enabled>Y</enabled> </hop>
   <hop> <from>Tabela de Matriculas do OpenTableIFES</from><to>If field value is null</to><enabled>Y</enabled> </hop>
   <hop> <from>Merge Cor</from><to>Table Pessoa</to><enabled>Y</enabled> </hop>
-  <hop> <from>Table Pessoa</from><to>Ordernar Tipo Escola</to><enabled>Y</enabled> </hop>
-  <hop> <from>Ordernar Tipo Escola</from><to>Merge Escola Origem</to><enabled>Y</enabled> </hop>
-  <hop> <from>Tabela Escola de Origem</from><to>Merge Escola Origem</to><enabled>Y</enabled> </hop>
-  <hop> <from>Merge Escola Origem</from><to>Tabela Aluno_Escola_Origem</to><enabled>Y</enabled> </hop>
-  <hop> <from>Tabela Aluno_Escola_Origem</from><to>Order por renda Familiar</to><enabled>Y</enabled> </hop>
-  <hop> <from>Order por renda Familiar</from><to>Merge Renda Familiar</to><enabled>Y</enabled> </hop>
-  <hop> <from>Tabela Renda Familiar</from><to>Merge Renda Familiar</to><enabled>Y</enabled> </hop>
-  <hop> <from>Merge Renda Familiar</from><to>Tabela Renda Famliar Pessoa</to><enabled>Y</enabled> </hop>
-  <hop> <from>Tabela Renda Famliar Pessoa</from><to>Ordernar forma Ingresso</to><enabled>Y</enabled> </hop>
-  <hop> <from>Ordernar forma Ingresso</from><to>Merge Forma de ingresso</to><enabled>Y</enabled> </hop>
-  <hop> <from>Tabela Forma de Ingresso</from><to>Merge Forma de ingresso</to><enabled>Y</enabled> </hop>
-  <hop> <from>Merge Forma de ingresso</from><to>Tabela Forma de Ingresso Pessoa</to><enabled>Y</enabled> </hop>
   </order>
   <step>
     <name>If field value is null</name>
@@ -330,7 +318,7 @@
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
       <xloc>512</xloc>
-      <yloc>400</yloc>
+      <yloc>384</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -373,7 +361,7 @@
            <schema_name/>
            </partitioning>
     <connection>OpenDataIfesSerra</connection>
-    <sql>SELECT &#xa;DISTINCT&#xa;hash_cod_matricula as matricula,&#xa;cor,&#xa;renda_familiar,&#xa;sexo,&#xa;tipo_escola_origem,&#xa;CAST&#x28;coalesce&#x28;cep, null&#x29; AS character&#x28;9&#x29;&#x29; cep_bd,&#xa;CAST&#x28;coalesce&#x28;ano_nascimento, &#x27;0&#x27;&#x29; AS integer&#x29; ano_nascimento,&#xa;CAST&#x28;coalesce&#x28;ano_let_atual, &#x27;0&#x27;&#x29; AS integer&#x29; ano_let_atual,&#xa;CAST&#x28;coalesce&#x28;ano_reservista, &#x27;0&#x27;&#x29; AS integer&#x29; ano_reservista,&#xa;CAST&#x28;coalesce&#x28;ano_conclusao_2_grau, &#x27;0&#x27;&#x29; AS integer&#x29; ano_conclusao_2_grau,&#xa;cod_forma_ingresso,&#xa;ano_letivo_ini,&#xa;periodo_letivo_ini,&#xa;periodo_let_atual&#xa;FROM&#xa;matriculas_impessoalizadas mi&#xa;where &#xa;mi.cod_instituicao &#x3d; 3&#xa;&#xa;&#xa;</sql>
+    <sql>SELECT &#xa;DISTINCT&#xa;hash_cod_matricula as matricula,&#xa;cor,&#xa;renda_familiar,&#xa;tipo_escola_origem,&#xa;sexo,&#xa;CAST&#x28;coalesce&#x28;cep, &#x27;0&#x27;&#x29; AS varchar&#x28;9&#x29;&#x29; cep,&#xa;CAST&#x28;coalesce&#x28;ano_nascimento, &#x27;0&#x27;&#x29; AS integer&#x29; ano_nascimento,&#xa;CAST&#x28;coalesce&#x28;ano_let_atual, &#x27;0&#x27;&#x29; AS integer&#x29; ano_let_atual,&#xa;CAST&#x28;coalesce&#x28;ano_reservista, &#x27;0&#x27;&#x29; AS integer&#x29; ano_reservista,&#xa;CAST&#x28;coalesce&#x28;ano_conclusao_2_grau, &#x27;0&#x27;&#x29; AS integer&#x29; ano_conclusao_2_grau,&#xa;cod_forma_ingresso,&#xa;ano_letivo_ini,&#xa;periodo_letivo_ini,&#xa;periodo_let_atual&#xa;FROM&#xa;matriculas_impessoalizadas mi&#xa;where &#xa;mi.cod_instituicao &#x3d; 3&#xa;and &#xa;cep is not null</sql>
     <limit>0</limit>
     <lookup/>
     <execute_each_row>N</execute_each_row>
@@ -381,8 +369,54 @@
     <lazy_conversion_active>N</lazy_conversion_active>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>256</xloc>
+      <xloc>176</xloc>
       <yloc>192</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Table Endereco</name>
+    <type>TableOutput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <connection>xdata</connection>
+    <schema/>
+    <table>core_endereco</table>
+    <commit>1000</commit>
+    <truncate>N</truncate>
+    <ignore_errors>N</ignore_errors>
+    <use_batch>Y</use_batch>
+    <specify_fields>Y</specify_fields>
+    <partitioning_enabled>N</partitioning_enabled>
+    <partitioning_field/>
+    <partitioning_daily>N</partitioning_daily>
+    <partitioning_monthly>Y</partitioning_monthly>
+    <tablename_in_field>N</tablename_in_field>
+    <tablename_field/>
+    <tablename_in_table>Y</tablename_in_table>
+    <return_keys>N</return_keys>
+    <return_field/>
+    <fields>
+        <field>
+          <column_name>pessoa_id</column_name>
+          <stream_name>id_pessoa</stream_name>
+        </field>
+        <field>
+          <column_name>CEP</column_name>
+          <stream_name>cep_bd</stream_name>
+        </field>
+    </fields>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>176</xloc>
+      <yloc>288</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -441,408 +475,6 @@
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
       <xloc>320</xloc>
       <yloc>288</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Tabela Escola de Origem</name>
-    <type>TableInput</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-    <connection>xdata</connection>
-    <sql>SELECT&#xa;  id as id_escola_origem&#xa;, codigo as codigo_escola_origem&#xa;FROM core_tipo_escola_origem order by codigo_escola_origem&#xa;</sql>
-    <limit>0</limit>
-    <lookup/>
-    <execute_each_row>N</execute_each_row>
-    <variables_active>N</variables_active>
-    <lazy_conversion_active>N</lazy_conversion_active>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>48</xloc>
-      <yloc>160</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Ordernar Tipo Escola</name>
-    <type>SortRows</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-      <directory>&#x25;&#x25;java.io.tmpdir&#x25;&#x25;</directory>
-      <prefix>out</prefix>
-      <sort_size>1000000</sort_size>
-      <free_memory/>
-      <compress>N</compress>
-      <compress_variable/>
-      <unique_rows>N</unique_rows>
-    <fields>
-      <field>
-        <name>tipo_escola_origem</name>
-        <ascending>Y</ascending>
-        <case_sensitive>N</case_sensitive>
-        <presorted>N</presorted>
-      </field>
-    </fields>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>192</xloc>
-      <yloc>288</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Merge Escola Origem</name>
-    <type>MergeJoin</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-<join_type>INNER</join_type>
-<step1>Ordernar Tipo Escola</step1>
-<step2>Tabela Escola de Origem</step2>
-    <keys_1>
-      <key>tipo_escola_origem</key>
-    </keys_1>
-    <keys_2>
-      <key>codigo_escola_origem</key>
-    </keys_2>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>48</xloc>
-      <yloc>288</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Tabela Aluno_Escola_Origem</name>
-    <type>TableOutput</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-    <connection>xdata</connection>
-    <schema/>
-    <table>core_escola_origem_pessoa</table>
-    <commit>1000</commit>
-    <truncate>N</truncate>
-    <ignore_errors>N</ignore_errors>
-    <use_batch>Y</use_batch>
-    <specify_fields>Y</specify_fields>
-    <partitioning_enabled>N</partitioning_enabled>
-    <partitioning_field/>
-    <partitioning_daily>N</partitioning_daily>
-    <partitioning_monthly>Y</partitioning_monthly>
-    <tablename_in_field>N</tablename_in_field>
-    <tablename_field/>
-    <tablename_in_table>Y</tablename_in_table>
-    <return_keys>N</return_keys>
-    <return_field/>
-    <fields>
-        <field>
-          <column_name>pessoa_id</column_name>
-          <stream_name>id_pessoa</stream_name>
-        </field>
-        <field>
-          <column_name>tipo_escola_origem_id</column_name>
-          <stream_name>id_escola_origem</stream_name>
-        </field>
-    </fields>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>48</xloc>
-      <yloc>480</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Tabela Renda Familiar</name>
-    <type>TableInput</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-    <connection>xdata</connection>
-    <sql>SELECT&#xa;  id as id_renda_familiar&#xa;, codigo as codigo_renda_familiar&#xa;FROM core_renda_familiar order by codigo_renda_familiar&#xa;</sql>
-    <limit>0</limit>
-    <lookup/>
-    <execute_each_row>N</execute_each_row>
-    <variables_active>N</variables_active>
-    <lazy_conversion_active>N</lazy_conversion_active>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>288</xloc>
-      <yloc>592</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Order por renda Familiar</name>
-    <type>SortRows</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-      <directory>&#x25;&#x25;java.io.tmpdir&#x25;&#x25;</directory>
-      <prefix>out</prefix>
-      <sort_size>1000000</sort_size>
-      <free_memory/>
-      <compress>N</compress>
-      <compress_variable/>
-      <unique_rows>N</unique_rows>
-    <fields>
-      <field>
-        <name>renda_familiar</name>
-        <ascending>Y</ascending>
-        <case_sensitive>N</case_sensitive>
-        <presorted>N</presorted>
-      </field>
-    </fields>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>224</xloc>
-      <yloc>480</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Merge Renda Familiar</name>
-    <type>MergeJoin</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-<join_type>INNER</join_type>
-<step1>Order por renda Familiar</step1>
-<step2>Tabela Renda Familiar</step2>
-    <keys_1>
-      <key>renda_familiar</key>
-    </keys_1>
-    <keys_2>
-      <key>codigo_renda_familiar</key>
-    </keys_2>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>384</xloc>
-      <yloc>480</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Tabela Renda Famliar Pessoa</name>
-    <type>TableOutput</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-    <connection>xdata</connection>
-    <schema/>
-    <table>core_renda_familiar_pessoa</table>
-    <commit>1000</commit>
-    <truncate>N</truncate>
-    <ignore_errors>N</ignore_errors>
-    <use_batch>Y</use_batch>
-    <specify_fields>Y</specify_fields>
-    <partitioning_enabled>N</partitioning_enabled>
-    <partitioning_field/>
-    <partitioning_daily>N</partitioning_daily>
-    <partitioning_monthly>Y</partitioning_monthly>
-    <tablename_in_field>N</tablename_in_field>
-    <tablename_field/>
-    <tablename_in_table>Y</tablename_in_table>
-    <return_keys>N</return_keys>
-    <return_field/>
-    <fields>
-        <field>
-          <column_name>pessoa_id</column_name>
-          <stream_name>id_pessoa</stream_name>
-        </field>
-        <field>
-          <column_name>renda_familiar_id</column_name>
-          <stream_name>id_renda_familiar</stream_name>
-        </field>
-    </fields>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>560</xloc>
-      <yloc>480</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Tabela Forma de Ingresso</name>
-    <type>TableInput</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-    <connection>xdata</connection>
-    <sql>SELECT&#xa;  id as id_forma_ingresso&#xa;, sigla as sigla_forma_ingresso&#xa;FROM core_forma_ingresso order by sigla_forma_ingresso&#xa;</sql>
-    <limit>0</limit>
-    <lookup/>
-    <execute_each_row>N</execute_each_row>
-    <variables_active>N</variables_active>
-    <lazy_conversion_active>N</lazy_conversion_active>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>496</xloc>
-      <yloc>592</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Ordernar forma Ingresso</name>
-    <type>SortRows</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-      <directory>&#x25;&#x25;java.io.tmpdir&#x25;&#x25;</directory>
-      <prefix>out</prefix>
-      <sort_size>1000000</sort_size>
-      <free_memory/>
-      <compress>N</compress>
-      <compress_variable/>
-      <unique_rows>N</unique_rows>
-    <fields>
-      <field>
-        <name>cod_forma_ingresso</name>
-        <ascending>Y</ascending>
-        <case_sensitive>N</case_sensitive>
-        <presorted>N</presorted>
-      </field>
-    </fields>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>736</xloc>
-      <yloc>480</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Merge Forma de ingresso</name>
-    <type>MergeJoin</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-<join_type>INNER</join_type>
-<step1>Ordernar forma Ingresso</step1>
-<step2>Tabela Forma de Ingresso</step2>
-    <keys_1>
-      <key>cod_forma_ingresso</key>
-    </keys_1>
-    <keys_2>
-      <key>sigla_forma_ingresso</key>
-    </keys_2>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>736</xloc>
-      <yloc>592</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Tabela Forma de Ingresso Pessoa</name>
-    <type>TableOutput</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-    <connection>xdata</connection>
-    <schema/>
-    <table>core_forma_ingresso_pessoa</table>
-    <commit>1000</commit>
-    <truncate>N</truncate>
-    <ignore_errors>N</ignore_errors>
-    <use_batch>Y</use_batch>
-    <specify_fields>Y</specify_fields>
-    <partitioning_enabled>N</partitioning_enabled>
-    <partitioning_field/>
-    <partitioning_daily>N</partitioning_daily>
-    <partitioning_monthly>Y</partitioning_monthly>
-    <tablename_in_field>N</tablename_in_field>
-    <tablename_field/>
-    <tablename_in_table>Y</tablename_in_table>
-    <return_keys>N</return_keys>
-    <return_field/>
-    <fields>
-        <field>
-          <column_name>forma_ingresso_id</column_name>
-          <stream_name>id_forma_ingresso</stream_name>
-        </field>
-        <field>
-          <column_name>pessoa_id</column_name>
-          <stream_name>id_pessoa</stream_name>
-        </field>
-    </fields>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>912</xloc>
-      <yloc>592</yloc>
       <draw>Y</draw>
       </GUI>
     </step>

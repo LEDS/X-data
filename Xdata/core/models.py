@@ -1,6 +1,4 @@
 from django.db import models
-from django.utils import timezone
-
 
 class Campus (models.Model):
     nome = models.CharField(max_length=50)
@@ -48,6 +46,26 @@ class Pessoa(models.Model):
     cor = models.ForeignKey(Cor)
     sexo = models.ForeignKey(Sexo)
 
+class Escola_Origem_Pessoa(models.Model):
+    pessoa = models.ForeignKey(Pessoa)
+    tipo_escola_origem = models.ForeignKey(Tipo_Escola_Origem)
+    ano = models.IntegerField(blank=True, null=True,)
+
+class Renda_Familiar_Pessoa(models.Model):
+    pessoa = models.ForeignKey(Pessoa)
+    renda_familiar = models.ForeignKey(Renda_Familiar)
+    ano = models.IntegerField(blank=True, null=True,)
+
+class Forma_Ingresso_Pessoa(models.Model):
+    pessoa = models.ForeignKey(Pessoa)
+    forma_ingresso = models.ForeignKey(Forma_Ingresso)
+    ano = models.IntegerField(blank=True, null=True, )
+
+class Forma_Ingresso_Pessoa(models.Model):
+    pessoa = models.ForeignKey(Pessoa)
+    forma_ingresso = models.ForeignKey(Forma_Ingresso)
+    ano = models.IntegerField(blank=True, null=True, )
+
 class Aluno (models.Model):
     matricula = models.CharField(max_length=255)
     curso = models.ForeignKey(Curso)
@@ -56,11 +74,9 @@ class Aluno (models.Model):
 class Situacao_Aluno(models.Model):
     aluno = models.ForeignKey(Aluno)
     situacao = models.ForeignKey(Situacao)
-    data_registro = models.DateField(blank=True, null=True, )
     periodo = models.ForeignKey(Periodo)
 
 class Endereco (models.Model):
-    CEP = models.CharField(max_length=15,blank=True,null=True,)
-    data_cadastro = models.DateField(default=timezone.now)
+    cep = models.CharField(max_length=50,blank=True,null=True,)
     pessoa = models.ForeignKey(Pessoa)
 
