@@ -43,6 +43,7 @@ class Pessoa(models.Model):
     ano_nascimento = models.IntegerField(blank=True,null=True,)
     ano_conclusao_ensino_medio = models.IntegerField(blank=True,null=True,)
     codigo_social = models.CharField(max_length=255)
+    ano_reservista = models.IntegerField(blank=True, null=True, )
     cor = models.ForeignKey(Cor)
     sexo = models.ForeignKey(Sexo)
 

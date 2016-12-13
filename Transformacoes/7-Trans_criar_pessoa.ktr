@@ -373,7 +373,7 @@
            <schema_name/>
            </partitioning>
     <connection>OpenDataIfesSerra</connection>
-    <sql>SELECT &#xa;DISTINCT&#xa;hash_cod_matricula as matricula,&#xa;cor,&#xa;renda_familiar,&#xa;sexo,&#xa;tipo_escola_origem,&#xa;CAST&#x28;coalesce&#x28;cep, null&#x29; AS character&#x28;9&#x29;&#x29; cep_bd,&#xa;CAST&#x28;coalesce&#x28;ano_nascimento, &#x27;0&#x27;&#x29; AS integer&#x29; ano_nascimento,&#xa;CAST&#x28;coalesce&#x28;ano_let_atual, &#x27;0&#x27;&#x29; AS integer&#x29; ano_let_atual,&#xa;CAST&#x28;coalesce&#x28;ano_reservista, &#x27;0&#x27;&#x29; AS integer&#x29; ano_reservista,&#xa;CAST&#x28;coalesce&#x28;ano_conclusao_2_grau, &#x27;0&#x27;&#x29; AS integer&#x29; ano_conclusao_2_grau,&#xa;cod_forma_ingresso,&#xa;ano_letivo_ini,&#xa;periodo_letivo_ini,&#xa;periodo_let_atual&#xa;FROM&#xa;matriculas_impessoalizadas mi&#xa;where &#xa;mi.cod_instituicao &#x3d; 3&#xa;&#xa;&#xa;</sql>
+    <sql>SELECT &#xa;DISTINCT&#xa;hash_cod_matricula as matricula,&#xa;cor,&#xa;renda_familiar,&#xa;sexo,&#xa;tipo_escola_origem,&#xa;cod_forma_ingresso,&#xa;CAST&#x28;coalesce&#x28;cep, null&#x29; AS character&#x28;9&#x29;&#x29; cep_bd,&#xa;CAST&#x28;coalesce&#x28;ano_nascimento, &#x27;0&#x27;&#x29; AS integer&#x29; ano_nascimento,&#xa;CAST&#x28;coalesce&#x28;ano_letivo_ini, &#x27;0&#x27;&#x29; AS integer&#x29; ano_letivo_ini,&#xa;CAST&#x28;coalesce&#x28;ano_reservista, &#x27;0&#x27;&#x29; AS integer&#x29; ano_reservista,&#xa;CAST&#x28;coalesce&#x28;ano_conclusao_2_grau, &#x27;0&#x27;&#x29; AS integer&#x29; ano_conclusao_2_grau&#xa;&#xa;FROM&#xa;matriculas_impessoalizadas mi&#xa;where &#xa;mi.cod_instituicao &#x3d; 3&#xa;&#xa;&#xa;</sql>
     <limit>0</limit>
     <lookup/>
     <execute_each_row>N</execute_each_row>
@@ -435,6 +435,10 @@
         <field>
           <column_name>ano_conclusao_ensino_medio</column_name>
           <stream_name>ano_conclusao_2_grau</stream_name>
+        </field>
+        <field>
+          <column_name>ano_reservista</column_name>
+          <stream_name>ano_reservista</stream_name>
         </field>
     </fields>
      <cluster_schema/>
@@ -570,6 +574,10 @@
           <column_name>tipo_escola_origem_id</column_name>
           <stream_name>id_escola_origem</stream_name>
         </field>
+        <field>
+          <column_name>ano</column_name>
+          <stream_name>ano_letivo_ini</stream_name>
+        </field>
     </fields>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
@@ -704,6 +712,10 @@
           <column_name>renda_familiar_id</column_name>
           <stream_name>id_renda_familiar</stream_name>
         </field>
+        <field>
+          <column_name>ano</column_name>
+          <stream_name>ano_letivo_ini</stream_name>
+        </field>
     </fields>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
@@ -837,6 +849,10 @@
         <field>
           <column_name>pessoa_id</column_name>
           <stream_name>id_pessoa</stream_name>
+        </field>
+        <field>
+          <column_name>ano</column_name>
+          <stream_name>ano_letivo_ini</stream_name>
         </field>
     </fields>
      <cluster_schema/>
