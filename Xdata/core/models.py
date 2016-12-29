@@ -36,8 +36,8 @@ class Situacao (models.Model):
     nome = models.CharField(max_length=50)
 
 class Forma_Ingresso(models.Model):
-    nome = models.CharField(max_length=100)
-    sigla = models.CharField(max_length=25)
+    nome = models.CharField(max_length=400)
+    sigla = models.CharField(max_length=50)
 
 class Pessoa(models.Model):
     ano_nascimento = models.IntegerField(blank=True,null=True,)
@@ -56,11 +56,6 @@ class Renda_Familiar_Pessoa(models.Model):
     pessoa = models.ForeignKey(Pessoa)
     renda_familiar = models.ForeignKey(Renda_Familiar)
     ano = models.IntegerField(blank=True, null=True,)
-
-class Forma_Ingresso_Pessoa(models.Model):
-    pessoa = models.ForeignKey(Pessoa)
-    forma_ingresso = models.ForeignKey(Forma_Ingresso)
-    ano = models.IntegerField(blank=True, null=True, )
 
 class Forma_Ingresso_Pessoa(models.Model):
     pessoa = models.ForeignKey(Pessoa)
