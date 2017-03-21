@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <transformation>
   <info>
-    <name>4-Trans_criar_aluno</name>
+    <name>5-Trans_nota_aluno_novo</name>
     <description/>
     <extended_description/>
     <trans_version/>
     <trans_type>Normal</trans_type>
-    <trans_status>0</trans_status>
     <directory>&#x2f;</directory>
     <parameters>
     </parameters>
@@ -67,10 +66,10 @@
     <clusterschemas>
     </clusterschemas>
   <created_user>-</created_user>
-  <created_date>2016&#x2f;10&#x2f;28 00&#x3a;33&#x3a;45.896</created_date>
+  <created_date>2017&#x2f;03&#x2f;20 22&#x3a;58&#x3a;34.127</created_date>
   <modified_user>-</modified_user>
-  <modified_date>2016&#x2f;10&#x2f;28 00&#x3a;33&#x3a;45.896</modified_date>
-    <key_for_session_key>H4sIAAAAAAAAAAMAAAAAAAAAAAA&#x3d;</key_for_session_key>
+  <modified_date>2017&#x2f;03&#x2f;20 22&#x3a;58&#x3a;34.127</modified_date>
+    <key_for_session_key/>
     <is_key_private>N</is_key_private>
   </info>
   <notepads>
@@ -124,28 +123,22 @@
     </attributes>
   </connection>
   <order>
-  <hop> <from>Sort por ano de ingresso</from><to>Merge Periodo de entrada</to><enabled>Y</enabled> </hop>
-  <hop> <from>Tabela de Entrada</from><to>Merge Pessoa</to><enabled>Y</enabled> </hop>
-  <hop> <from>Tabela Pessoa XData</from><to>Merge Pessoa</to><enabled>Y</enabled> </hop>
-  <hop> <from>Merge Pessoa</from><to>Order por Curso</to><enabled>Y</enabled> </hop>
-  <hop> <from>Order por Curso</from><to>Merge Curso</to><enabled>Y</enabled> </hop>
-  <hop> <from>Tabela Curso XData</from><to>Merge Curso</to><enabled>Y</enabled> </hop>
-  <hop> <from>Merge Curso</from><to>Tabela Aluno</to><enabled>Y</enabled> </hop>
-  <hop> <from>Tabela Aluno</from><to>Order by Situacao Matricula</to><enabled>Y</enabled> </hop>
-  <hop> <from>Tabela Situacao XData</from><to>Merge Join</to><enabled>Y</enabled> </hop>
-  <hop> <from>Order by Situacao Matricula</from><to>Merge Join</to><enabled>Y</enabled> </hop>
-  <hop> <from>Merge Join</from><to>Sort Ano Periodo</to><enabled>Y</enabled> </hop>
-  <hop> <from>Sort Ano Periodo</from><to>Merge Periodo</to><enabled>Y</enabled> </hop>
-  <hop> <from>Tabela Periodo</from><to>Merge Periodo</to><enabled>Y</enabled> </hop>
-  <hop> <from>Merge Periodo</from><to>Tabela Situacao Aluno</to><enabled>Y</enabled> </hop>
-  <hop> <from>Tabela Periodo 2</from><to>Merge Periodo de entrada</to><enabled>Y</enabled> </hop>
-  <hop> <from>Tabela Situacao Aluno</from><to>Sort por ano de ingresso</to><enabled>Y</enabled> </hop>
-  <hop> <from>Merge Periodo de entrada</from><to>ID Matriculado</to><enabled>Y</enabled> </hop>
-  <hop> <from>ID Matriculado</from><to>Salvando a situacao aluno</to><enabled>Y</enabled> </hop>
+  <hop> <from>Tabela Notas do Academico</from><to>Merge alunos</to><enabled>Y</enabled> </hop>
+  <hop> <from>Tabela Aluno - XData</from><to>Merge alunos</to><enabled>Y</enabled> </hop>
+  <hop> <from>Merge alunos</from><to>Ordenar por curso</to><enabled>Y</enabled> </hop>
+  <hop> <from>Tabela Disciplina</from><to>MergeDisciplina</to><enabled>Y</enabled> </hop>
+  <hop> <from>Ordenar por curso</from><to>MergeDisciplina</to><enabled>Y</enabled> </hop>
+  <hop> <from>MergeDisciplina</from><to>Order periodo</to><enabled>Y</enabled> </hop>
+  <hop> <from>Tabela de Periodo</from><to>Merge Join</to><enabled>Y</enabled> </hop>
+  <hop> <from>Order periodo</from><to>Merge Join</to><enabled>Y</enabled> </hop>
+  <hop> <from>Merge Join</from><to>Order by situacao</to><enabled>Y</enabled> </hop>
+  <hop> <from>Order by situacao</from><to>Merge Join 2</to><enabled>Y</enabled> </hop>
+  <hop> <from>Tabela Situacao</from><to>Merge Join 2</to><enabled>Y</enabled> </hop>
+  <hop> <from>Merge Join 2</from><to>Tabela Desempenho</to><enabled>Y</enabled> </hop>
   </order>
   <step>
-    <name>ID Matriculado</name>
-    <type>Constant</type>
+    <name>Tabela Notas do Academico</name>
+    <type>TableInput</type>
     <description/>
     <distribute>Y</distribute>
     <custom_distribution/>
@@ -154,30 +147,49 @@
            <method>none</method>
            <schema_name/>
            </partitioning>
-    <fields>
-      <field>
-        <name>id_matriculado</name>
-        <type>Integer</type>
-        <format/>
-        <currency/>
-        <decimal/>
-        <group/>
-        <nullif>17</nullif>
-        <length>-1</length>
-        <precision>-1</precision>
-        <set_empty_string>N</set_empty_string>
-      </field>
-    </fields>
+    <connection>OpenDataIfesSerra</connection>
+    <sql>Select  &#xa;h.hash_cod_matricula,&#xa;h.cod_disciplina,&#xa;h.desc_disciplina,&#xa;h.ano_let,&#xa;h.periodo_let,&#xa;h.n_periodo,&#xa;h.nota,&#xa;h.n_faltas,&#xa;h.situacao,&#xa;h.percentual_presenca&#xa;from &#xa;historico_escolar_notas_impessoalizado h inner join &#xa;matriculas_impessoalizadas m on h.hash_cod_matricula &#x3d; m.hash_cod_matricula &#xa;where &#xa;m.cod_instituicao &#x3d; 3 and &#xa;nota is not null&#xa;order by hash_cod_matricula</sql>
+    <limit>0</limit>
+    <lookup/>
+    <execute_each_row>N</execute_each_row>
+    <variables_active>N</variables_active>
+    <lazy_conversion_active>N</lazy_conversion_active>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>480</xloc>
-      <yloc>544</yloc>
+      <xloc>80</xloc>
+      <yloc>144</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
 
   <step>
-    <name>Merge Curso</name>
+    <name>Tabela Aluno - XData</name>
+    <type>TableInput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <connection>xdata</connection>
+    <sql>Select matricula, id as id_aluno from core_aluno order by matricula</sql>
+    <limit>0</limit>
+    <lookup/>
+    <execute_each_row>N</execute_each_row>
+    <variables_active>N</variables_active>
+    <lazy_conversion_active>N</lazy_conversion_active>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>272</xloc>
+      <yloc>32</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Merge alunos</name>
     <type>MergeJoin</type>
     <description/>
     <distribute>Y</distribute>
@@ -188,17 +200,171 @@
            <schema_name/>
            </partitioning>
 <join_type>INNER</join_type>
-<step1>Order por Curso</step1>
-<step2>Tabela Curso XData</step2>
+<step1>Tabela Notas do Academico</step1>
+<step2>Tabela Aluno - XData</step2>
     <keys_1>
-      <key>desc_curso</key>
+      <key>hash_cod_matricula</key>
     </keys_1>
     <keys_2>
-      <key>nome_curso</key>
+      <key>matricula</key>
     </keys_2>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>576</xloc>
+      <xloc>272</xloc>
+      <yloc>144</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Ordenar por curso</name>
+    <type>SortRows</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+      <directory>&#x25;&#x25;java.io.tmpdir&#x25;&#x25;</directory>
+      <prefix>out</prefix>
+      <sort_size>1000000</sort_size>
+      <free_memory/>
+      <compress>N</compress>
+      <compress_variable/>
+      <unique_rows>N</unique_rows>
+    <fields>
+      <field>
+        <name>cod_disciplina</name>
+        <ascending>Y</ascending>
+        <case_sensitive>N</case_sensitive>
+        <presorted>N</presorted>
+      </field>
+    </fields>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>400</xloc>
+      <yloc>144</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Tabela Disciplina</name>
+    <type>TableInput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <connection>xdata</connection>
+    <sql>Select &#xa;id as id_disciplina,&#xa;code &#xa;from core_disciplina&#xa;order by code</sql>
+    <limit>0</limit>
+    <lookup/>
+    <execute_each_row>N</execute_each_row>
+    <variables_active>N</variables_active>
+    <lazy_conversion_active>N</lazy_conversion_active>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>528</xloc>
+      <yloc>32</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>MergeDisciplina</name>
+    <type>MergeJoin</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+<join_type>INNER</join_type>
+<step1>Tabela Disciplina</step1>
+<step2>Ordenar por curso</step2>
+    <keys_1>
+      <key>code</key>
+    </keys_1>
+    <keys_2>
+      <key>cod_disciplina</key>
+    </keys_2>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>528</xloc>
+      <yloc>144</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Tabela de Periodo</name>
+    <type>TableInput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <connection>xdata</connection>
+    <sql>Select &#xa;id as id_periodo,&#xa;ano,&#xa;semestre&#xa;from core_periodo&#xa;order by ano, semestre</sql>
+    <limit>0</limit>
+    <lookup/>
+    <execute_each_row>N</execute_each_row>
+    <variables_active>N</variables_active>
+    <lazy_conversion_active>N</lazy_conversion_active>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>736</xloc>
+      <yloc>32</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Order periodo</name>
+    <type>SortRows</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+      <directory>&#x25;&#x25;java.io.tmpdir&#x25;&#x25;</directory>
+      <prefix>out</prefix>
+      <sort_size>1000000</sort_size>
+      <free_memory/>
+      <compress>N</compress>
+      <compress_variable/>
+      <unique_rows>N</unique_rows>
+    <fields>
+      <field>
+        <name>ano_let</name>
+        <ascending>Y</ascending>
+        <case_sensitive>N</case_sensitive>
+        <presorted>N</presorted>
+      </field>
+      <field>
+        <name>periodo_let</name>
+        <ascending>Y</ascending>
+        <case_sensitive>N</case_sensitive>
+        <presorted>N</presorted>
+      </field>
+    </fields>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>640</xloc>
       <yloc>144</yloc>
       <draw>Y</draw>
       </GUI>
@@ -216,112 +382,26 @@
            <schema_name/>
            </partitioning>
 <join_type>INNER</join_type>
-<step1>Tabela Situacao XData</step1>
-<step2>Order by Situacao Matricula</step2>
+<step1>Tabela de Periodo</step1>
+<step2>Order periodo</step2>
     <keys_1>
-      <key>situacao_nome</key>
-    </keys_1>
-    <keys_2>
-      <key>situacao_matricula</key>
-    </keys_2>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>544</xloc>
-      <yloc>256</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Merge Periodo</name>
-    <type>MergeJoin</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-<join_type>INNER</join_type>
-<step1>Sort Ano Periodo</step1>
-<step2>Tabela Periodo</step2>
-    <keys_1>
-      <key>ano_atual</key>
-      <key>periodo_atual</key>
-    </keys_1>
-    <keys_2>
       <key>ano</key>
       <key>semestre</key>
-    </keys_2>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>224</xloc>
-      <yloc>256</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Merge Periodo de entrada</name>
-    <type>MergeJoin</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-<join_type>INNER</join_type>
-<step1>Sort por ano de ingresso</step1>
-<step2>Tabela Periodo 2</step2>
-    <keys_1>
-      <key>ano_entrada</key>
-      <key>periodo_entrada</key>
     </keys_1>
     <keys_2>
-      <key>ano_matricula</key>
-      <key>semestre_matricula</key>
+      <key>ano_let</key>
+      <key>periodo_let</key>
     </keys_2>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>224</xloc>
-      <yloc>544</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Merge Pessoa</name>
-    <type>MergeJoin</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-<join_type>INNER</join_type>
-<step1>Tabela de Entrada</step1>
-<step2>Tabela Pessoa XData</step2>
-    <keys_1>
-      <key>hash_cod_matricula</key>
-    </keys_1>
-    <keys_2>
-      <key>codigo_social</key>
-    </keys_2>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>288</xloc>
+      <xloc>736</xloc>
       <yloc>144</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
 
   <step>
-    <name>Order by Situacao Matricula</name>
+    <name>Order by situacao</name>
     <type>SortRows</type>
     <description/>
     <distribute>Y</distribute>
@@ -340,7 +420,7 @@
       <unique_rows>N</unique_rows>
     <fields>
       <field>
-        <name>situacao_matricula</name>
+        <name>situacao</name>
         <ascending>Y</ascending>
         <case_sensitive>N</case_sensitive>
         <presorted>N</presorted>
@@ -355,171 +435,7 @@
     </step>
 
   <step>
-    <name>Order por Curso</name>
-    <type>SortRows</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-      <directory>&#x25;&#x25;java.io.tmpdir&#x25;&#x25;</directory>
-      <prefix>out</prefix>
-      <sort_size>1000000</sort_size>
-      <free_memory/>
-      <compress>N</compress>
-      <compress_variable/>
-      <unique_rows>N</unique_rows>
-    <fields>
-      <field>
-        <name>desc_curso</name>
-        <ascending>Y</ascending>
-        <case_sensitive>N</case_sensitive>
-        <presorted>N</presorted>
-      </field>
-    </fields>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>432</xloc>
-      <yloc>144</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Sort Ano Periodo</name>
-    <type>SortRows</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-      <directory>&#x25;&#x25;java.io.tmpdir&#x25;&#x25;</directory>
-      <prefix>out</prefix>
-      <sort_size>1000000</sort_size>
-      <free_memory/>
-      <compress>N</compress>
-      <compress_variable/>
-      <unique_rows>N</unique_rows>
-    <fields>
-      <field>
-        <name>ano_atual</name>
-        <ascending>Y</ascending>
-        <case_sensitive>N</case_sensitive>
-        <presorted>N</presorted>
-      </field>
-      <field>
-        <name>periodo_atual</name>
-        <ascending>Y</ascending>
-        <case_sensitive>N</case_sensitive>
-        <presorted>N</presorted>
-      </field>
-    </fields>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>384</xloc>
-      <yloc>256</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Sort por ano de ingresso</name>
-    <type>SortRows</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-      <directory>&#x25;&#x25;java.io.tmpdir&#x25;&#x25;</directory>
-      <prefix>out</prefix>
-      <sort_size>1000000</sort_size>
-      <free_memory/>
-      <compress>N</compress>
-      <compress_variable/>
-      <unique_rows>N</unique_rows>
-    <fields>
-      <field>
-        <name>ano_entrada</name>
-        <ascending>Y</ascending>
-        <case_sensitive>N</case_sensitive>
-        <presorted>N</presorted>
-      </field>
-      <field>
-        <name>periodo_entrada</name>
-        <ascending>Y</ascending>
-        <case_sensitive>N</case_sensitive>
-        <presorted>N</presorted>
-      </field>
-    </fields>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>224</xloc>
-      <yloc>432</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Tabela Aluno</name>
-    <type>TableOutput</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-    <connection>xdata</connection>
-    <schema/>
-    <table>core_aluno</table>
-    <commit>1000</commit>
-    <truncate>N</truncate>
-    <ignore_errors>N</ignore_errors>
-    <use_batch>N</use_batch>
-    <specify_fields>Y</specify_fields>
-    <partitioning_enabled>N</partitioning_enabled>
-    <partitioning_field/>
-    <partitioning_daily>N</partitioning_daily>
-    <partitioning_monthly>Y</partitioning_monthly>
-    <tablename_in_field>N</tablename_in_field>
-    <tablename_field/>
-    <tablename_in_table>Y</tablename_in_table>
-    <return_keys>Y</return_keys>
-    <return_field>id_aluno</return_field>
-    <fields>
-        <field>
-          <column_name>matricula</column_name>
-          <stream_name>hash_cod_matricula</stream_name>
-        </field>
-        <field>
-          <column_name>pessoa_id</column_name>
-          <stream_name>id_pessoa</stream_name>
-        </field>
-        <field>
-          <column_name>curso_id</column_name>
-          <stream_name>id_curso</stream_name>
-        </field>
-    </fields>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>736</xloc>
-      <yloc>144</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Tabela Curso XData</name>
+    <name>Tabela Situacao</name>
     <type>TableInput</type>
     <description/>
     <distribute>Y</distribute>
@@ -530,7 +446,7 @@
            <schema_name/>
            </partitioning>
     <connection>xdata</connection>
-    <sql>select &#xa;nome as nome_curso, &#xa;id as id_curso &#xa;from core_curso order by nome</sql>
+    <sql>Select &#xa;distinct&#xa;id as id_situacao,&#xa;nome as nome_situacao&#xa;from core_situacao&#xa;order by nome</sql>
     <limit>0</limit>
     <lookup/>
     <execute_each_row>N</execute_each_row>
@@ -538,143 +454,15 @@
     <lazy_conversion_active>N</lazy_conversion_active>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>576</xloc>
-      <yloc>16</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Tabela Periodo</name>
-    <type>TableInput</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-    <connection>xdata</connection>
-    <sql>Select &#xa; id as id_periodo,&#xa; ano, &#xa; semestre&#xa; from core_periodo&#xa; order by ano, semestre</sql>
-    <limit>0</limit>
-    <lookup/>
-    <execute_each_row>N</execute_each_row>
-    <variables_active>N</variables_active>
-    <lazy_conversion_active>N</lazy_conversion_active>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>64</xloc>
-      <yloc>256</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Tabela Periodo 2</name>
-    <type>TableInput</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-    <connection>xdata</connection>
-    <sql>Select &#xa; id as id_periodo_matricula,&#xa; ano as ano_matricula, &#xa; semestre as semestre_matricula&#xa; from core_periodo&#xa; order by ano, semestre</sql>
-    <limit>0</limit>
-    <lookup/>
-    <execute_each_row>N</execute_each_row>
-    <variables_active>N</variables_active>
-    <lazy_conversion_active>N</lazy_conversion_active>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>48</xloc>
-      <yloc>544</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Tabela Pessoa XData</name>
-    <type>TableInput</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-    <connection>xdata</connection>
-    <sql>Select &#xa;codigo_social, &#xa;id as id_pessoa&#xa;from core_pessoa&#xa;order by codigo_social</sql>
-    <limit>0</limit>
-    <lookup/>
-    <execute_each_row>N</execute_each_row>
-    <variables_active>N</variables_active>
-    <lazy_conversion_active>N</lazy_conversion_active>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>288</xloc>
-      <yloc>16</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Tabela Situacao Aluno</name>
-    <type>TableOutput</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-    <connection>xdata</connection>
-    <schema/>
-    <table>core_situacao_aluno</table>
-    <commit>1000</commit>
-    <truncate>N</truncate>
-    <ignore_errors>N</ignore_errors>
-    <use_batch>Y</use_batch>
-    <specify_fields>Y</specify_fields>
-    <partitioning_enabled>N</partitioning_enabled>
-    <partitioning_field/>
-    <partitioning_daily>N</partitioning_daily>
-    <partitioning_monthly>Y</partitioning_monthly>
-    <tablename_in_field>N</tablename_in_field>
-    <tablename_field/>
-    <tablename_in_table>Y</tablename_in_table>
-    <return_keys>N</return_keys>
-    <return_field/>
-    <fields>
-        <field>
-          <column_name>aluno_id</column_name>
-          <stream_name>id_aluno</stream_name>
-        </field>
-        <field>
-          <column_name>periodo_id</column_name>
-          <stream_name>id_periodo</stream_name>
-        </field>
-        <field>
-          <column_name>situacao_id</column_name>
-          <stream_name>id_situacao</stream_name>
-        </field>
-    </fields>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>224</xloc>
+      <xloc>560</xloc>
       <yloc>352</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
 
   <step>
-    <name>Tabela Situacao XData</name>
-    <type>TableInput</type>
+    <name>Merge Join 2</name>
+    <type>MergeJoin</type>
     <description/>
     <distribute>Y</distribute>
     <custom_distribution/>
@@ -683,49 +471,25 @@
            <method>none</method>
            <schema_name/>
            </partitioning>
-    <connection>xdata</connection>
-    <sql>Select &#xa;id as id_situacao,&#xa;nome as situacao_nome&#xa;from &#xa;core_situacao&#xa;order by nome</sql>
-    <limit>0</limit>
-    <lookup/>
-    <execute_each_row>N</execute_each_row>
-    <variables_active>N</variables_active>
-    <lazy_conversion_active>N</lazy_conversion_active>
+<join_type>INNER</join_type>
+<step1>Order by situacao</step1>
+<step2>Tabela Situacao</step2>
+    <keys_1>
+      <key>situacao</key>
+    </keys_1>
+    <keys_2>
+      <key>nome_situacao</key>
+    </keys_2>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>544</xloc>
-      <yloc>336</yloc>
+      <xloc>560</xloc>
+      <yloc>256</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
 
   <step>
-    <name>Tabela de Entrada</name>
-    <type>TableInput</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-    <connection>OpenDataIfesSerra</connection>
-    <sql>SELECT &#xa;distinct&#xa;mi.hash_cod_matricula,&#xa;mi.ano_letivo_ini as ano_entrada,&#xa;mi.periodo_letivo_ini as periodo_entrada,&#xa;mi.desc_curso,  &#xa;mi.desc_sit_matricula as situacao_matricula, &#xa;mi.periodo_let_atual as periodo_atual,&#xa;mi.ano_let_atual as ano_atual&#xa;FROM&#xa;matriculas_impessoalizadas as mi&#xa;NATURAL join historico_escolar_notas_impessoalizado as h&#xa;INNER join situacoes_tabelas st on st.nome_coluna &#x3d; &#x27;SIT_MATRICULA_PAUTA&#x27; and st.valor_char&#x3d; CAST&#x28;h.sit_matricula_pauta AS char&#x29;&#xa;where &#xa;mi.cod_instituicao &#x3d; 3&#xa;order by hash_cod_matricula&#xa;</sql>
-    <limit>0</limit>
-    <lookup/>
-    <execute_each_row>N</execute_each_row>
-    <variables_active>N</variables_active>
-    <lazy_conversion_active>N</lazy_conversion_active>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>128</xloc>
-      <yloc>144</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Salvando a situacao aluno</name>
+    <name>Tabela Desempenho</name>
     <type>TableOutput</type>
     <description/>
     <distribute>Y</distribute>
@@ -737,7 +501,7 @@
            </partitioning>
     <connection>xdata</connection>
     <schema/>
-    <table>core_situacao_aluno</table>
+    <table>core_desempenho</table>
     <commit>1000</commit>
     <truncate>N</truncate>
     <ignore_errors>N</ignore_errors>
@@ -754,8 +518,16 @@
     <return_field/>
     <fields>
         <field>
-          <column_name>periodo_id</column_name>
-          <stream_name>id_periodo_matricula</stream_name>
+          <column_name>nota</column_name>
+          <stream_name>nota</stream_name>
+        </field>
+        <field>
+          <column_name>percentual_presenca</column_name>
+          <stream_name>percentual_presenca</stream_name>
+        </field>
+        <field>
+          <column_name>numero_faltas</column_name>
+          <stream_name>n_faltas</stream_name>
         </field>
         <field>
           <column_name>aluno_id</column_name>
@@ -763,13 +535,21 @@
         </field>
         <field>
           <column_name>situacao_id</column_name>
-          <stream_name>id_matriculado</stream_name>
+          <stream_name>id_situacao</stream_name>
+        </field>
+        <field>
+          <column_name>periodo_id</column_name>
+          <stream_name>id_periodo</stream_name>
+        </field>
+        <field>
+          <column_name>disciplina_id</column_name>
+          <stream_name>id_disciplina</stream_name>
         </field>
     </fields>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>480</xloc>
-      <yloc>432</yloc>
+      <xloc>368</xloc>
+      <yloc>256</yloc>
       <draw>Y</draw>
       </GUI>
     </step>

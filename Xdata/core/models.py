@@ -12,6 +12,11 @@ class Curso (models.Model):
     sigla = models.CharField(max_length=50)
     departamentos = models.ForeignKey(Departamento, blank=True, null=True,)
 
+class Disciplina (models.Model):
+    nome = models.CharField(max_length=255)
+    code = models.CharField(max_length=10)
+    curso = models.ForeignKey(Curso, blank=True, null=True,)
+
 class Cor (models.Model):
     nome = models.CharField(max_length=50)
     sigla = models.CharField(max_length=3)
@@ -72,7 +77,15 @@ class Situacao_Aluno(models.Model):
     situacao = models.ForeignKey(Situacao)
     periodo = models.ForeignKey(Periodo)
 
+class Desempenho(models.Model):
+    aluno = models.ForeignKey(Aluno)
+    situacao = models.ForeignKey(Situacao)
+    periodo = models.ForeignKey(Periodo)
+    disciplina = models.ForeignKey(Disciplina)
+    nota = models.FloatField()
+    percentual_presenca = models.FloatField()
+    numero_faltas = models.IntegerField()    
+
 class Endereco (models.Model):
     cep = models.CharField(max_length=50,blank=True,null=True,)
     pessoa = models.ForeignKey(Pessoa)
-
