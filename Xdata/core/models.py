@@ -84,7 +84,8 @@ class Desempenho(models.Model):
     disciplina = models.ForeignKey(Disciplina)
     nota = models.FloatField()
     percentual_presenca = models.FloatField()
-    numero_faltas = models.IntegerField()    
+    numero_faltas = models.IntegerField()
+    periodo_curso = models.IntegerField(blank=True, null=True, )   
 
 class Endereco (models.Model):
     cep = models.CharField(max_length=50,blank=True,null=True,)
