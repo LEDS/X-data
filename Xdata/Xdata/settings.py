@@ -37,9 +37,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'Aluno',
-    'Pessoa',
-    'Organizacional'
+    'app_aluno',
+    'app_pessoa',
+    'app_organizacional'
 ]
 
 MIDDLEWARE = [
@@ -79,10 +79,10 @@ WSGI_APPLICATION = 'Xdata.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'xdata_1',
+        'NAME': 'xdata',
         'USER': 'postgres',
         'HOST': 'localhost',
-        'PASSWORD': '123',
+        'PASSWORD': '123123',
         'PORT': '5432',
     }
 }
