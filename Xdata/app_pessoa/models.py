@@ -53,7 +53,7 @@ class Pessoa(models.Model):
     ano_conclusao_ensino_medio = models.IntegerField(blank=True,null=True,)
     ano_conclusao_primeiro_grau  = models.IntegerField(blank=True,null=True,)
 
-    codigo_social = models.CharField(max_length=255)
+    codigo_social = models.CharField(max_length=255, null=True,)
     ano_reservista = models.IntegerField(blank=True, null=True, )
     cor = models.ForeignKey(Cor)
     sexo = models.ForeignKey(Sexo)
@@ -61,20 +61,20 @@ class Pessoa(models.Model):
     #estado_civil_pais =
     #escolaridade_pai =
     #escolaridade_mae =
-    pai_falecido = models.BooleanField(default=False)
-    mae_falecido = models.BooleanField(default=False)
-    tipo_responsavel = models.ForeignKey(Responsavel)
-    reside = models.ForeignKey(Reside)
+    pai_falecido = models.NullBooleanField(default=False, null=True,)
+    mae_falecido = models.NullBooleanField(default=False, null=True,)
+    tipo_responsavel = models.ForeignKey(Responsavel, null=True,)
+    reside = models.ForeignKey(Reside, null=True,)
 
-    necessidade_fisica = models.BooleanField(default=False)
-    necessidade_auditiva = models.BooleanField(default=False)
-    necessidade_mental = models.BooleanField(default=False)
-    necessidade_multipla = models.BooleanField(default=False)
-    superdotado = models.BooleanField(default=False)
-    profissao = models.ForeignKey(Profissao)
+    necessidade_fisica = models.NullBooleanField(default=False, null=True,)
+    necessidade_auditiva = models.NullBooleanField(default=False, null=True,)
+    necessidade_mental = models.NullBooleanField(default=False, null=True,)
+    necessidade_multipla = models.NullBooleanField(default=False, null=True,)
+    superdotado = models.NullBooleanField(default=False, null=True,)
+    profissao = models.ForeignKey(Profissao, null=True, )
     #numero_filhos =
     ano_reservista = models.IntegerField(blank=True,null=True,)
-    bolsa_familia = models.BooleanField(default=False)
+    bolsa_familia = models.NullBooleanField(default=False, null=True,)
     class Meta:
         db_table = 'pessoa'
 

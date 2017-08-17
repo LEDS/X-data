@@ -11,7 +11,7 @@ class Aluno (models.Model):
     coeficiente_rendimento = models.FloatField(blank=True, null=True, )
     coeficiente_progressao = models.FloatField(blank=True, null=True, )
     nota_selecao = models.FloatField(blank=True, null=True, )
-    bolsa_escola = models.BooleanField(default=False)
+    bolsa_escola = models.NullBooleanField(default=False, null=True,)
     class Meta:
         db_table = 'aluno'
 
