@@ -9,6 +9,9 @@ class Cor (models.Model):
     class Meta:
         db_table = 'cor'
 
+    def __str__(self):
+        return self.nome
+
 class Sexo (models.Model):
     nome = models.CharField(max_length=50)
     sigla = models.CharField(max_length=1)
